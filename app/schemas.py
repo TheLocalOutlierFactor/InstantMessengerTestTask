@@ -1,27 +1,20 @@
 from datetime import datetime
+import uuid
 
+from fastapi_users import schemas
 from pydantic import BaseModel
 
 
-class UserCreate(BaseModel):
-    username: str
-    password: str
-
-    class Config:
-        orm_mode = True
+class UserRead(schemas.BaseUser[uuid.UUID]):
+    pass
 
 
-class UserInDB(BaseModel):
-    id: int
-    username: str
-
-    class Config:
-        orm_mode = True
+class UserCreate(schemas.BaseUserCreate):
+    pass
 
 
-class UserLogin(BaseModel):
-    username: str
-    password: str
+class UserUpdate(schemas.BaseUserUpdate):
+    pass
 
 
 class MessageCreate(BaseModel):
@@ -37,15 +30,15 @@ class MessageInDB(BaseModel):
     timestamp: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class MessageOut(BaseModel):
     id: int
-    sender: UserInDB
-    receiver: UserInDB
+    sender: UserRead
+    receiver: UserRead
     content: str
     timestamp: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
